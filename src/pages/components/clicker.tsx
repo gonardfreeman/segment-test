@@ -68,7 +68,7 @@ function Clicker() {
                 console.warn("no analytics");
                 return;
               }
-              analytics.track("document body clicked!");
+              analytics.track("Button clicked!");
             }}
           >
             Button
