@@ -19,13 +19,19 @@ function Clicker() {
   const [writeKey, setWriteKey] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    async function handleLoadKey() {
+      const resp = await (await fetch("/api/writeKey")).json();
+      if (!resp?.writeKey) {
+        return;
+      }
+      setWriteKey(resp.writeKey);
+    }
+    handleLoadKey().catch((err) => console.log(err));
+  }, [writeKey]);
+
+  useEffect(() => {
     async function handleLoadAnalytics() {
       try {
-        const resp = await (await fetch("/api/writeKey")).json();
-        if (!resp?.writeKey) {
-          return;
-        }
-        setWriteKey(resp.writeKey);
         if (!writeKey) {
           return;
         }
