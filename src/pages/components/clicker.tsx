@@ -17,7 +17,6 @@ function Clicker() {
     email: faker.internet.email(),
   });
   const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
-  const [writeKey, setWriteKey] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     async function handleLoadAnalytics() {
@@ -26,11 +25,9 @@ function Clicker() {
         if (!resp?.writeKey) {
           return;
         }
-        setWriteKey(resp.writeKey);
-        if (!writeKey) {
-          return;
-        }
-        const [analytics] = await AnalyticsBrowser.load({ writeKey });
+        const [analytics] = await AnalyticsBrowser.load({
+          writeKey: resp.writeKey,
+        });
         setAnalytics(analytics);
       } catch (err) {
         console.log(err);
@@ -38,7 +35,7 @@ function Clicker() {
       }
     }
     handleLoadAnalytics().catch((err) => console.log(err));
-  }, [writeKey, analytics]);
+  }, [analytics]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
