@@ -1,6 +1,6 @@
 {
   "functions": {
-    "app/api/hello/writeKey.ts": {
+    "src/pages/api/writeKey.ts": {
       "memory": 3008,
       "maxDuration": 60
     }
