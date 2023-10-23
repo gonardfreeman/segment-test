@@ -32,14 +32,13 @@ function Clicker() {
         }
         const [analytics] = await AnalyticsBrowser.load({ writeKey });
         setAnalytics(analytics);
-        await analytics.identify(userId, person);
       } catch (err) {
         console.log(err);
         setAnalytics(undefined);
       }
     }
     handleLoadAnalytics().catch((err) => console.log(err));
-  }, [person, userId, writeKey, analytics]);
+  }, [writeKey, analytics]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
@@ -65,19 +64,23 @@ function Clicker() {
         <div className="mt-4 flex gap-4">
           <button
             className="bg-blue-500 text-white border border-blue-500 py-2 px-4 rounded hover:bg-blue-600 hover:border-blue-600"
-            onClick={() => {
+            onClick={async () => {
               if (!analytics) {
                 console.warn("no analytics");
                 return;
               }
-
-              analytics.track("Button clicked!", {
-                clickCount,
-              });
-              setClickCount(clickCount + 1);
+              try {
+                await analytics.identify(userId, person);
+                analytics.track("Button clicked!", {
+                  clickCount,
+                });
+                setClickCount(clickCount + 1);
+              } catch (err) {
+                console.log(err);
+              }
             }}
           >
-            Button
+            Click Me
           </button>
           <button
             className="bg-white text-blue-500 border border-blue-500 py-2 px-4 rounded hover:bg-blue-600 hover:text-white"
