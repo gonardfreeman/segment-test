@@ -45,7 +45,9 @@ function Clicker() {
       <div className="p-4">
         <h2 className="text-xl font-semibold">User Title</h2>
         <div className="card-body">
-          <h3 className="text-lg font-semibold">{person.name}</h3>
+          <h3 className="text-lg font-semibold">
+            <b>Name:</b> {person.name}
+          </h3>
           <p className="text-gray-600">
             Email:
             <a
