@@ -10,6 +10,7 @@ interface Person {
 }
 
 function Clicker() {
+  const [clickCount, setClickCount] = useState<number>(0);
   const [userId, setUserId] = useState<string>(nanoid());
   const [person, setPerson] = useState<Person>({
     name: faker.person.fullName(),
@@ -17,17 +18,6 @@ function Clicker() {
   });
   const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
   const [writeKey, setWriteKey] = useState<string | undefined>(undefined);
-
-  //   useEffect(() => {
-  //     async function handleLoadKey() {
-  //       const resp = await (await fetch("/api/writeKey")).json();
-  //       if (!resp?.writeKey) {
-  //         return;
-  //       }
-  //       setWriteKey(resp.writeKey);
-  //     }
-  //     handleLoadKey().catch((err) => console.log(err));
-  //   }, [writeKey]);
 
   useEffect(() => {
     async function handleLoadAnalytics() {
@@ -60,13 +50,16 @@ function Clicker() {
             <b>Name:</b> {person.name}
           </h3>
           <p className="text-gray-600">
-            Email:
+            <b>Email:</b>
             <a
               href={`mailto:${person.email}`}
               className="text-blue-500 hover:underline"
             >
               {person.email}
             </a>
+          </p>
+          <p className="text-gray-600">
+            <b>Clicked Times: </b> {clickCount}
           </p>
         </div>
         <div className="mt-4 flex gap-4">
@@ -77,7 +70,11 @@ function Clicker() {
                 console.warn("no analytics");
                 return;
               }
-              analytics.track("Button clicked!");
+
+              analytics.track("Button clicked!", {
+                clickCount,
+              });
+              setClickCount(clickCount + 1);
             }}
           >
             Button
