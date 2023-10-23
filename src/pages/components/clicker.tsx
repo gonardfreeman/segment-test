@@ -73,11 +73,11 @@ function Clicker() {
                 console.log(userId, person);
                 const resp = await analytics.identify(userId, person);
                 console.log(resp);
+                setClickCount(clickCount + 1);
                 analytics.track("button_clicked", {
                   clickCount,
                   person,
                 });
-                setClickCount(clickCount + 1);
               } catch (err) {
                 console.log(err);
               }
