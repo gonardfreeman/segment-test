@@ -70,8 +70,10 @@ function Clicker() {
                 return;
               }
               try {
-                await analytics.identify(userId, person);
-                analytics.track("Button clicked!", {
+                console.log(userId, person);
+                const resp = await analytics.identify(userId, person);
+                console.log(resp);
+                analytics.track("button_clicked", {
                   clickCount,
                 });
                 setClickCount(clickCount + 1);
