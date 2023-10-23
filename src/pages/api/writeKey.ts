@@ -9,5 +9,9 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ writeKey: process.env.SEGMENT_KEY });
+  if (req.method === "GET") {
+    res.status(200).json({ writeKey: process.env.SEGMENT_KEY });
+    return;
+  }
+  res.status(404);
 }
