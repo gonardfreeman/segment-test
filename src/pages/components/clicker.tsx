@@ -10,6 +10,7 @@ interface Person {
 }
 
 function Clicker() {
+  const [once, setOnce] = useState<boolean>(false);
   const [clickCount, setClickCount] = useState<number>(0);
   const [userId, setUserId] = useState<string>(nanoid());
   const [person, setPerson] = useState<Person>({
@@ -22,20 +23,22 @@ function Clicker() {
     async function handleLoadAnalytics() {
       try {
         const resp = await (await fetch("/api/writeKey")).json();
-        if (!resp?.writeKey) {
+        if (!resp?.writeKey || once) {
           return;
         }
         const [analytics] = await AnalyticsBrowser.load({
           writeKey: resp.writeKey,
         });
+        setOnce(true);
         setAnalytics(analytics);
       } catch (err) {
         console.log(err);
         setAnalytics(undefined);
+        setOnce(false);
       }
     }
     handleLoadAnalytics().catch((err) => console.log(err));
-  }, [analytics]);
+  }, [once]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
@@ -72,6 +75,7 @@ function Clicker() {
                 console.log(resp);
                 analytics.track("button_clicked", {
                   clickCount,
+                  person,
                 });
                 setClickCount(clickCount + 1);
               } catch (err) {
