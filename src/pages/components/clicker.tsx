@@ -1,17 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { useState, useEffect } from "react";
-import { Analytics, Context, AnalyticsBrowser } from "@segment/analytics-next";
+import { Analytics, AnalyticsBrowser } from "@segment/analytics-next";
 
-import { useWriteKey } from "@/hooks/useConfig";
 import { nanoid } from "nanoid";
-
-// const analytics = AnalyticsBrowser.load({ writeKey: '<YOUR_WRITE_KEY>' })
-
-// analytics.identify('hello world')
-
-// document.body?.addEventListener('click', () => {
-//   analytics.track('document body clicked!')
-// })
 
 interface Person {
   email: string;
@@ -25,14 +16,19 @@ function Clicker() {
     email: faker.internet.email(),
   });
   const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
-  const [writeKey] = useWriteKey();
+  const [writeKey, setWriteKey] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     async function handleLoadAnalytics() {
-      if (!writeKey) {
-        return;
-      }
       try {
+        const resp = await (await fetch("/api/writeKey")).json();
+        if (!resp?.writeKey) {
+          return;
+        }
+        setWriteKey(resp.writeKey);
+        if (!writeKey) {
+          return;
+        }
         const [analytics] = await AnalyticsBrowser.load({ writeKey });
         setAnalytics(analytics);
         await analytics.identify(userId, person);
@@ -42,7 +38,7 @@ function Clicker() {
       }
     }
     handleLoadAnalytics().catch((err) => console.log(err));
-  }, [person, userId, analytics, writeKey]);
+  }, [person, userId, writeKey, analytics]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
