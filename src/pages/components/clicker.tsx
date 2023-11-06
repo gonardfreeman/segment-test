@@ -2,17 +2,37 @@ import { faker } from "@faker-js/faker";
 import { useState, useEffect } from "react";
 import { Analytics, AnalyticsBrowser } from "@segment/analytics-next";
 
-import { nanoid } from "nanoid";
-
 interface Person {
   email: string;
   name: string;
 }
 
+function randomAddress(): {
+  address: string;
+  zip_code: string;
+} {
+  const zip_code = faker.location.zipCode();
+  return {
+    zip_code,
+    address: [
+      faker.location.streetAddress(),
+      faker.location.city(),
+      `${faker.location.state({
+        abbreviated: true,
+      })} ${zip_code}`,
+    ].join(", "),
+  };
+}
+
 function Clicker() {
   const [once, setOnce] = useState<boolean>(false);
   const [clickCount, setClickCount] = useState<number>(1);
-  const [userId, setUserId] = useState<string>(nanoid());
+  const [userId, setUserId] = useState<number>(
+    faker.number.int({
+      min: 100000,
+      max: 999999,
+    })
+  );
   const [person, setPerson] = useState<Person>({
     name: faker.person.fullName(),
     email: faker.internet.email(),
@@ -71,11 +91,20 @@ function Clicker() {
               }
               try {
                 console.log(userId, person);
-                const resp = await analytics.identify(userId, person);
+                const resp = await analytics.identify(`${userId}`, person);
                 console.log(resp);
+                const { zip_code, address } = randomAddress();
                 analytics.track("button_clicked", {
-                  clickCount,
-                  person,
+                  address,
+                  zip_code,
+                  name: faker.company.name(),
+                  user_id: userId,
+                  phone: faker.phone.number().replaceAll("-", ""),
+                  mobile_phone: faker.phone.number().replaceAll("-", ""),
+                  boss_site_profile_url: faker.internet.url(),
+                  user_email: person.email,
+                  user_full_name: person.name,
+                  pipedrive_user_type: "Buyer",
                 });
                 setClickCount(clickCount + 1);
               } catch (err) {
@@ -88,7 +117,12 @@ function Clicker() {
           <button
             className="bg-white text-blue-500 border border-blue-500 py-2 px-4 rounded hover:bg-blue-600 hover:text-white"
             onClick={() => {
-              setUserId(nanoid());
+              setUserId(
+                faker.number.int({
+                  min: 100000,
+                  max: 999999,
+                })
+              );
               setClickCount(1);
               setPerson({
                 name: faker.person.fullName(),
