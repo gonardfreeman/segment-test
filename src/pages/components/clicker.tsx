@@ -11,15 +11,17 @@ function randomAddress(): {
   address: string;
   zip_code: string;
 } {
-  const zip_code = faker.location.zipCode();
+  const state = faker.location.state({
+    abbreviated: true,
+  });
+  const zip_code = faker.location.zipCode({ state });
+
   return {
     zip_code,
     address: [
       faker.location.streetAddress(),
       faker.location.city(),
-      `${faker.location.state({
-        abbreviated: true,
-      })} ${zip_code}`,
+      `${state} ${zip_code}`,
     ].join(", "),
   };
 }
