@@ -14,7 +14,7 @@ function randomAddress(): {
   const state = faker.location.state({
     abbreviated: true,
   });
-  const zip_code = faker.location.zipCode({ state });
+  const zip_code = faker.location.zipCode("#####");
 
   return {
     zip_code,
