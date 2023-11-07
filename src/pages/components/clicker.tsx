@@ -2,6 +2,8 @@ import { faker } from "@faker-js/faker";
 import { useState, useEffect } from "react";
 import { Analytics, AnalyticsBrowser } from "@segment/analytics-next";
 
+import { PHONE_FORMAT, ZIP_CODE_FORMAT, USER_ID_FORMAT } from "@/constants";
+
 interface Person {
   email: string;
   name: string;
@@ -14,7 +16,7 @@ function randomAddress(): {
   const state = faker.location.state({
     abbreviated: true,
   });
-  const zip_code = faker.location.zipCode("#####");
+  const zip_code = faker.location.zipCode(ZIP_CODE_FORMAT);
 
   return {
     zip_code,
@@ -29,11 +31,8 @@ function randomAddress(): {
 function Clicker() {
   const [once, setOnce] = useState<boolean>(false);
   const [clickCount, setClickCount] = useState<number>(1);
-  const [userId, setUserId] = useState<number>(
-    faker.number.int({
-      min: 100000,
-      max: 999999,
-    })
+  const [userId, setUserId] = useState<string>(
+    faker.helpers.replaceSymbolWithNumber(USER_ID_FORMAT)
   );
   const [person, setPerson] = useState<Person>({
     name: faker.person.fullName(),
@@ -101,8 +100,9 @@ function Clicker() {
                   zip_code,
                   name: faker.company.name(),
                   user_id: userId,
-                  phone: faker.phone.number().replaceAll("-", ""),
-                  mobile_phone: faker.phone.number().replaceAll("-", ""),
+                  phone: faker.helpers.replaceSymbolWithNumber(PHONE_FORMAT),
+                  mobile_phone:
+                    faker.helpers.replaceSymbolWithNumber(PHONE_FORMAT),
                   boss_site_profile_url: faker.internet.url(),
                   user_email: person.email,
                   user_full_name: person.name,
@@ -119,12 +119,7 @@ function Clicker() {
           <button
             className="bg-white text-blue-500 border border-blue-500 py-2 px-4 rounded hover:bg-blue-600 hover:text-white"
             onClick={() => {
-              setUserId(
-                faker.number.int({
-                  min: 100000,
-                  max: 999999,
-                })
-              );
+              setUserId(faker.helpers.replaceSymbolWithNumber(USER_ID_FORMAT));
               setClickCount(1);
               setPerson({
                 name: faker.person.fullName(),
