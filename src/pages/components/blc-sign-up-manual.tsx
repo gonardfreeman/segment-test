@@ -13,7 +13,7 @@ function ManualMode({ inputs }: MainComponentProps) {
   return (
     <div className="flex flex-col items-center space-y-4">
       {inputs.map((input) => (
-        <div key={input.key} className="flex items-center space-x-2">
+        <div key={input.key} className="flex items-end gap-2">
           <Input
             label={input.label}
             value={inputValues[input.label]}
@@ -21,7 +21,14 @@ function ManualMode({ inputs }: MainComponentProps) {
               setInputValues({ ...inputValues, [input.label]: newValue })
             }
           />
-          <GenerateButton onClick={input.handleGenerate} />
+          <GenerateButton
+            onClick={() => {
+              setInputValues({
+                ...inputValues,
+                [input.label]: input.handleGenerate(),
+              });
+            }}
+          />
         </div>
       ))}
     </div>
