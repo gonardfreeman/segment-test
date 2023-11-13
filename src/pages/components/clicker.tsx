@@ -1,43 +1,14 @@
-import { faker } from "@faker-js/faker";
 import { useState, useEffect } from "react";
 import { Analytics, AnalyticsBrowser } from "@segment/analytics-next";
 
-import { PHONE_FORMAT, ZIP_CODE_FORMAT, USER_ID_FORMAT } from "@/constants";
-
-interface Person {
-  email: string;
-  name: string;
-}
-
-function randomAddress(): {
-  address: string;
-  zip_code: string;
-} {
-  const state = faker.location.state({
-    abbreviated: true,
-  });
-  const zip_code = faker.location.zipCode(ZIP_CODE_FORMAT);
-
-  return {
-    zip_code,
-    address: [
-      faker.location.streetAddress(),
-      faker.location.city(),
-      `${state} ${zip_code}`,
-    ].join(", "),
-  };
-}
+import { createRandomPerson, createRandomUserId } from "@/data";
+import { createBLCSignUpTrack } from "@/data/tracks";
 
 function Clicker() {
   const [once, setOnce] = useState<boolean>(false);
   const [clickCount, setClickCount] = useState<number>(1);
-  const [userId, setUserId] = useState<string>(
-    faker.helpers.replaceSymbolWithNumber(USER_ID_FORMAT)
-  );
-  const [person, setPerson] = useState<Person>({
-    name: faker.person.fullName(),
-    email: faker.internet.email(),
-  });
+  const [userId, setUserId] = useState<string>(createRandomUserId());
+  const [person, setPerson] = useState<Person>(createRandomPerson());
   const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
 
   useEffect(() => {
@@ -94,20 +65,14 @@ function Clicker() {
                 console.log(userId, person);
                 const resp = await analytics.identify(`${userId}`, person);
                 console.log(resp);
-                const { zip_code, address } = randomAddress();
-                analytics.track("button_clicked", {
-                  address,
-                  zip_code,
-                  name: faker.company.name(),
-                  user_id: userId,
-                  phone: faker.helpers.replaceSymbolWithNumber(PHONE_FORMAT),
-                  mobile_phone:
-                    faker.helpers.replaceSymbolWithNumber(PHONE_FORMAT),
-                  boss_site_profile_url: faker.internet.url(),
-                  user_email: person.email,
-                  user_full_name: person.name,
-                  pipedrive_user_type: "Buyer",
-                });
+                analytics.track(
+                  "button_clicked",
+                  createBLCSignUpTrack({
+                    user_id: userId,
+                    user_full_name: person.name,
+                    user_email: person.email,
+                  })
+                );
                 setClickCount(clickCount + 1);
               } catch (err) {
                 console.log(err);
@@ -119,12 +84,9 @@ function Clicker() {
           <button
             className="bg-white text-blue-500 border border-blue-500 py-2 px-4 rounded hover:bg-blue-600 hover:text-white"
             onClick={() => {
-              setUserId(faker.helpers.replaceSymbolWithNumber(USER_ID_FORMAT));
+              setUserId(createRandomUserId());
               setClickCount(1);
-              setPerson({
-                name: faker.person.fullName(),
-                email: faker.internet.email(),
-              });
+              setPerson(createRandomPerson());
             }}
           >
             Regenerate
