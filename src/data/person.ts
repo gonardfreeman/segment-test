@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import type { Person } from "@/typings";
 
 export function createRandomPerson(): Person {
   return {
