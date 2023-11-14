@@ -2,7 +2,7 @@ import { useState } from "react";
 import Input from "./input";
 import GenerateButton from "./generateButton";
 
-function ManualMode({ inputs }: MainComponentProps) {
+function ManualMode({ inputs = [] }: MainComponentProps) {
   const [inputValues, setInputValues] = useState(
     inputs.reduce((acc, input) => {
       acc[input.label] = "";
