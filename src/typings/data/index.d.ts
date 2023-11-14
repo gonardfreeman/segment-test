@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 interface Person {
   email: string;
   name: string;
@@ -36,4 +37,8 @@ interface InputProps {
 
 interface MainComponentProps {
   readonly inputs: InputConfig[];
+}
+
+export interface LayoutProps {
+  readonly children: readonly ReactNode;
 }
