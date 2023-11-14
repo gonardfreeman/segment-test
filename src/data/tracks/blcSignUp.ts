@@ -9,6 +9,8 @@ import {
   createURL,
 } from "..";
 
+import type { SignUpRequestTrackBody } from "@/typings";
+
 export function createBLCSignUpTrack({
   zip_code,
   address,

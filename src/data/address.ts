@@ -1,5 +1,7 @@
 import { faker } from "@faker-js/faker";
 
+import type { Address } from "@/typings";
+
 import { ZIP_CODE_FORMAT } from "@/constants";
 
 export function createRandomAddress(): Address {

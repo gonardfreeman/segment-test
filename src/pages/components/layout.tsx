@@ -1,5 +1,5 @@
 import Header from "./header";
-import { LayoutProps } from "@/typings/data";
+import { LayoutProps } from "@/typings";
 
 export default function Layout({ children }: LayoutProps) {
   return (

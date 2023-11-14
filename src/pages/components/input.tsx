@@ -1,3 +1,5 @@
+import type { InputProps } from "@/typings";
+
 function Input({ label, name, value, onChange }: InputProps) {
   return (
     <div className="flex flex-col">

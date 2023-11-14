@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Analytics, AnalyticsBrowser } from "@segment/analytics-next";
 
+import type { Person } from "@/typings";
+
 import { createRandomPerson, createRandomUserId } from "@/data";
 import { createBLCSignUpTrack } from "@/data/tracks";
 import { BUTTON_CLASS } from "@/constants";

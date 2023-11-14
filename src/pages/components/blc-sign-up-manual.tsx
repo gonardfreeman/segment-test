@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Analytics, AnalyticsBrowser } from "@segment/analytics-next";
 
+import type { MainComponentProps, Address } from "@/typings";
+
 import Input from "./input";
 import GenerateButton from "./generateButton";
 import { createBLCSignUpTrack } from "@/data/tracks";
