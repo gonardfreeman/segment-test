@@ -4,7 +4,10 @@ export default function Header() {
   return (
     <header className="bg-blue-500 p-4 text-white">
       <div className="container mx-auto flex gap-2 items-end">
-        <h1 className="text-2xl font-bold">Create Track</h1>
+        <Link href="/">
+          <h1 className="text-2xl font-bold cursor-pointer">Create Track</h1>
+        </Link>
+
         <nav className="ml-4">
           <ul className="flex space-x-4">
             <li>
