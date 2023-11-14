@@ -92,10 +92,7 @@ function ManualMode({ inputs = [] }: MainComponentProps) {
                 name: inputValues.user_full_name,
               });
               console.log(resp);
-              analytics.track(
-                "button_clicked",
-                createBLCSignUpTrack(inputValues)
-              );
+              analytics.track("button_clicked", inputValues);
             } catch (err) {
               console.log(err);
             }
