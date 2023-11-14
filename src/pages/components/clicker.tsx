@@ -3,6 +3,7 @@ import { Analytics, AnalyticsBrowser } from "@segment/analytics-next";
 
 import { createRandomPerson, createRandomUserId } from "@/data";
 import { createBLCSignUpTrack } from "@/data/tracks";
+import { BUTTON_CLASS } from "@/constants";
 
 function Clicker() {
   const [once, setOnce] = useState<boolean>(false);
@@ -55,7 +56,7 @@ function Clicker() {
         </div>
         <div className="mt-4 flex gap-4">
           <button
-            className="bg-blue-500 text-white border border-blue-500 py-2 px-4 rounded hover:bg-blue-600 hover:border-blue-600"
+            className={BUTTON_CLASS}
             onClick={async () => {
               if (!analytics) {
                 console.warn("no analytics");

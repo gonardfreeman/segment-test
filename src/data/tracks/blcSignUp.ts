@@ -46,34 +46,55 @@ export function createBLCSignUpTrack({
 
 export const BLC_SIGN_UP_TRACK_INPUTS = [
   {
+    name: "address",
     label: "Address",
     key: nanoid(),
-    handleGenerate: () => createRandomAddress().address,
+    handleGenerate: () => createRandomAddress(),
   },
   {
+    name: "zip_code",
     label: "Zip Code",
     key: nanoid(),
-    handleGenerate: () => createRandomAddress().zip_code,
+    handleGenerate: () => createRandomAddress(),
   },
   {
+    name: "name",
     label: "Company Name",
     key: nanoid(),
     handleGenerate: () => createCompanyName(),
   },
   {
+    name: "user_id",
     label: "User Id",
     key: nanoid(),
     handleGenerate: () => createRandomUserId(),
   },
-  { label: "Phone", key: nanoid(), handleGenerate: () => createPhone() },
-  { label: "Mobile Phone", key: nanoid(), handleGenerate: () => createPhone() },
-  { label: "Profile URL", key: nanoid(), handleGenerate: () => createURL() },
   {
+    name: "phone",
+    label: "Phone",
+    key: nanoid(),
+    handleGenerate: () => createPhone(),
+  },
+  {
+    name: "mobile_phone",
+    label: "Mobile Phone",
+    key: nanoid(),
+    handleGenerate: () => createPhone(),
+  },
+  {
+    name: "boss_site_profile_url",
+    label: "Profile URL",
+    key: nanoid(),
+    handleGenerate: () => createURL(),
+  },
+  {
+    name: "user_email",
     label: "User Email",
     key: nanoid(),
     handleGenerate: () => createRandomPerson().email,
   },
   {
+    name: "user_full_name",
     label: "User Name",
     key: nanoid(),
     handleGenerate: () => createRandomPerson().name,

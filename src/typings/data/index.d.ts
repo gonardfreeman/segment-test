@@ -23,12 +23,14 @@ interface SignUpRequestTrackBody {
 interface InputConfig {
   readonly key: string;
   readonly label: string;
-  readonly handleGenerate: () => string;
+  readonly name: string;
+  readonly handleGenerate: () => string | Address;
 }
 
 interface InputProps {
   readonly label: string;
   readonly value: string;
+  readonly name: string;
   readonly onChange: (newValue: string) => void;
 }
 
