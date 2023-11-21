@@ -69,7 +69,7 @@ function Clicker() {
                 const resp = await analytics.identify(`${userId}`, person);
                 console.log(resp);
                 analytics.track(
-                  "button_clicked",
+                  "Signup request",
                   createBLCSignUpTrack({
                     user_id: userId,
                     user_full_name: person.name,

@@ -92,7 +92,7 @@ function ManualMode({ inputs = [] }: MainComponentProps) {
                 name: inputValues.user_full_name,
               });
               console.log(resp);
-              analytics.track("button_clicked", inputValues);
+              analytics.track("Signup request", inputValues);
             } catch (err) {
               console.log(err);
             }
