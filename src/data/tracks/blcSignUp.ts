@@ -107,4 +107,16 @@ export const BLC_SIGN_UP_TRACK_INPUTS = [
     key: nanoid(),
     handleGenerate: () => createRandomPerson().name,
   },
+  {
+    name: "business_type",
+    label: "Business Type",
+    key: nanoid(),
+    handleGenerate: () => getRandomBusinessType(),
+  },
+  {
+    name: "cars_sold_per_month",
+    label: "Cars Sold Per Month",
+    key: nanoid(),
+    handleGenerate: () => getRandomCarsSold(),
+  },
 ];
