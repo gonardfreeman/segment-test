@@ -7,6 +7,8 @@ import {
   createRandomPerson,
   createRandomUserId,
   createURL,
+  getRandomBusinessType,
+  getRandomCarsSold,
 } from "..";
 
 import type { SignUpRequestTrackBody } from "@/typings";
@@ -21,6 +23,8 @@ export function createBLCSignUpTrack({
   phone = createPhone(),
   mobile_phone = createPhone(),
   boss_site_profile_url = createURL(),
+  business_type = getRandomBusinessType(),
+  cars_sold_per_month = getRandomCarsSold(),
 }: SignUpRequestTrackBody): SignUpRequestTrackBody {
   if (!zip_code || !address) {
     const { zip_code: zip, address: addr } = createRandomAddress();
@@ -43,6 +47,8 @@ export function createBLCSignUpTrack({
     user_email,
     user_full_name,
     pipedrive_user_type: "Buyer",
+    business_type,
+    cars_sold_per_month,
   };
 }
 

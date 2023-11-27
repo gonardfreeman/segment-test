@@ -9,6 +9,8 @@ export interface SignUpRequestTrackBody {
   user_email?: string;
   user_full_name?: string;
   pipedrive_user_type?: "Buyer";
+  business_type?: BUSINESS_TYPE_TYPE;
+  cars_sold_per_month?: CARS_SOLD_PER_MONTH_TYPE;
 }
 
 export interface Person {
