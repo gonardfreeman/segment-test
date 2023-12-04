@@ -6,11 +6,11 @@ import type { MainComponentProps, Address } from "@/typings";
 import Input from "./input";
 import GenerateButton from "./generateButton";
 import { createBLCSignUpTrack } from "@/data/tracks";
-import { BUTTON_CLASS } from "@/constants";
+import { BUTTON_CLASS, DEFAULT_EVENT_NAME } from "@/constants";
 import { createRandomUserId } from "@/data";
 
 function ManualMode({ inputs = [] }: MainComponentProps) {
-  const [eventName, setEventName] = useState<string>("Signup request");
+  const [eventName, setEventName] = useState<string>(DEFAULT_EVENT_NAME);
   const [once, setOnce] = useState<boolean>(false);
   const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
 
@@ -51,38 +51,41 @@ function ManualMode({ inputs = [] }: MainComponentProps) {
           value={eventName}
           onChange={(newValue) => setEventName(newValue)}
         />
-        {inputs.map((input) => (
-          <>
-            <Input
-              key={input.key}
-              label={input.label}
-              name={input.name}
-              value={inputValues[input.name]}
-              onChange={(newValue) =>
-                setInputValues({ ...inputValues, [input.name]: newValue })
-              }
-            />
-            <GenerateButton
-              key={input.key}
-              onClick={() => {
-                let newValue = input.handleGenerate();
-                if (["address", "zip_code"].includes(input.name)) {
-                  setInputValues({
-                    ...inputValues,
-                    address: (newValue as Address).address,
-                    zip_code: (newValue as Address).zip_code,
-                  });
-                  return;
-                }
+        <GenerateButton
+          onClick={() => {
+            setEventName(DEFAULT_EVENT_NAME);
+          }}
+        />
+      </div>
+      {inputs.map((input) => (
+        <div className="flex items-end gap-2" key={input.key}>
+          <Input
+            label={input.label}
+            name={input.name}
+            value={inputValues[input.name]}
+            onChange={(newValue) =>
+              setInputValues({ ...inputValues, [input.name]: newValue })
+            }
+          />
+          <GenerateButton
+            onClick={() => {
+              let newValue = input.handleGenerate();
+              if (["address", "zip_code"].includes(input.name)) {
                 setInputValues({
                   ...inputValues,
-                  [input.name]: input.handleGenerate() as string,
+                  address: (newValue as Address).address,
+                  zip_code: (newValue as Address).zip_code,
                 });
-              }}
-            />
-          </>
-        ))}
-      </div>
+                return;
+              }
+              setInputValues({
+                ...inputValues,
+                [input.name]: input.handleGenerate() as string,
+              });
+            }}
+          />
+        </div>
+      ))}
 
       <div className="flex gap-2">
         <button
