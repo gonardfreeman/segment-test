@@ -10,6 +10,7 @@ import { BUTTON_CLASS } from "@/constants";
 import { createRandomUserId } from "@/data";
 
 function ManualMode({ inputs = [] }: MainComponentProps) {
+  const [eventName, setEventName] = useState<string>("Signup request");
   const [once, setOnce] = useState<boolean>(false);
   const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
 
@@ -43,35 +44,46 @@ function ManualMode({ inputs = [] }: MainComponentProps) {
 
   return (
     <div className="flex flex-col items-center space-y-4">
-      {inputs.map((input) => (
-        <div key={input.key} className="flex items-end gap-2">
-          <Input
-            label={input.label}
-            name={input.name}
-            value={inputValues[input.name]}
-            onChange={(newValue) =>
-              setInputValues({ ...inputValues, [input.name]: newValue })
-            }
-          />
-          <GenerateButton
-            onClick={() => {
-              let newValue = input.handleGenerate();
-              if (["address", "zip_code"].includes(input.name)) {
+      <div className="flex items-end gap-2">
+        <Input
+          label="Event Name"
+          name="event_name"
+          value={eventName}
+          onChange={(newValue) => setEventName(newValue)}
+        />
+        {inputs.map((input) => (
+          <>
+            <Input
+              key={input.key}
+              label={input.label}
+              name={input.name}
+              value={inputValues[input.name]}
+              onChange={(newValue) =>
+                setInputValues({ ...inputValues, [input.name]: newValue })
+              }
+            />
+            <GenerateButton
+              key={input.key}
+              onClick={() => {
+                let newValue = input.handleGenerate();
+                if (["address", "zip_code"].includes(input.name)) {
+                  setInputValues({
+                    ...inputValues,
+                    address: (newValue as Address).address,
+                    zip_code: (newValue as Address).zip_code,
+                  });
+                  return;
+                }
                 setInputValues({
                   ...inputValues,
-                  address: (newValue as Address).address,
-                  zip_code: (newValue as Address).zip_code,
+                  [input.name]: input.handleGenerate() as string,
                 });
-                return;
-              }
-              setInputValues({
-                ...inputValues,
-                [input.name]: input.handleGenerate() as string,
-              });
-            }}
-          />
-        </div>
-      ))}
+              }}
+            />
+          </>
+        ))}
+      </div>
+
       <div className="flex gap-2">
         <button
           className={BUTTON_CLASS}
@@ -92,7 +104,7 @@ function ManualMode({ inputs = [] }: MainComponentProps) {
                 name: inputValues.user_full_name,
               });
               console.log(resp);
-              analytics.track("Signup request", inputValues);
+              analytics.track(eventName, inputValues);
             } catch (err) {
               console.log(err);
             }
