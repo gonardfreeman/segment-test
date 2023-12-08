@@ -12,23 +12,32 @@ function Clicker() {
   const [clickCount, setClickCount] = useState<number>(1);
   const [userId, setUserId] = useState<string>(createRandomUserId());
   const [person, setPerson] = useState<Person>(createRandomPerson());
-  const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
+  const [analyticsStage, setStageAnalytics] = useState<Analytics | undefined>(
+    undefined
+  );
+  const [analyticsHawks, setHawksAnalytics] = useState<Analytics | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     async function handleLoadAnalytics() {
       try {
         const resp = await (await fetch("/api/writeKey")).json();
-        if (!resp?.writeKey || once) {
+        if (!resp?.stage || once) {
           return;
         }
-        const [analytics] = await AnalyticsBrowser.load({
-          writeKey: resp.writeKey,
+        const [stageAnalytics] = await AnalyticsBrowser.load({
+          writeKey: resp.stage,
+        });
+        const [hawksAnalytics] = await AnalyticsBrowser.load({
+          writeKey: resp.hawks,
         });
         setOnce(true);
-        setAnalytics(analytics);
+        setStageAnalytics(stageAnalytics);
+        setHawksAnalytics(hawksAnalytics);
       } catch (err) {
         console.log(err);
-        setAnalytics(undefined);
+        setStageAnalytics(undefined);
         setOnce(false);
       }
     }
@@ -60,15 +69,15 @@ function Clicker() {
           <button
             className={BUTTON_CLASS}
             onClick={async () => {
-              if (!analytics) {
+              if (!analyticsStage) {
                 console.warn("no analytics");
                 return;
               }
               try {
                 console.log(userId, person);
-                const resp = await analytics.identify(`${userId}`, person);
+                const resp = await analyticsStage.identify(`${userId}`, person);
                 console.log(resp);
-                analytics.track(
+                analyticsStage.track(
                   "Signup request",
                   createBLCSignUpTrack({
                     user_id: userId,
@@ -82,7 +91,34 @@ function Clicker() {
               }
             }}
           >
-            Click Me
+            Click Me Stage
+          </button>
+          <button
+            className={BUTTON_CLASS}
+            onClick={async () => {
+              if (!analyticsHawks) {
+                console.warn("no analytics");
+                return;
+              }
+              try {
+                console.log(userId, person);
+                const resp = await analyticsHawks.identify(`${userId}`, person);
+                console.log(resp);
+                analyticsHawks.track(
+                  "Signup request",
+                  createBLCSignUpTrack({
+                    user_id: userId,
+                    user_full_name: person.name,
+                    user_email: person.email,
+                  })
+                );
+                setClickCount(clickCount + 1);
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            Click Me Hawks
           </button>
           <button
             className="bg-white text-blue-500 border border-blue-500 py-2 px-4 rounded hover:bg-blue-600 hover:text-white"

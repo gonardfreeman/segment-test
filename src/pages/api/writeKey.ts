@@ -2,7 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
-  writeKey: string | undefined;
+  stage: string | undefined;
+  hawks: string | undefined;
 };
 
 export default function handler(
@@ -10,7 +11,12 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === "GET") {
-    res.status(200).json({ writeKey: process.env.SEGMENT_KEY });
+    res
+      .status(200)
+      .json({
+        stage: process.env.STAGE,
+        hawks: process.env.DMYTRO_SB_AND_HAWKS,
+      });
     return;
   }
   res.status(404);

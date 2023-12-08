@@ -12,23 +12,32 @@ import { createRandomUserId } from "@/data";
 function ManualMode({ inputs = [] }: MainComponentProps) {
   const [eventName, setEventName] = useState<string>(DEFAULT_EVENT_NAME);
   const [once, setOnce] = useState<boolean>(false);
-  const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
+  const [analyticsStage, setStageAnalytics] = useState<Analytics | undefined>(
+    undefined
+  );
+  const [analyticsHawks, setHawksAnalytics] = useState<Analytics | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     async function handleLoadAnalytics() {
       try {
         const resp = await (await fetch("/api/writeKey")).json();
-        if (!resp?.writeKey || once) {
+        if (!resp?.stage || once) {
           return;
         }
-        const [analytics] = await AnalyticsBrowser.load({
-          writeKey: resp.writeKey,
+        const [stageAnalytics] = await AnalyticsBrowser.load({
+          writeKey: resp.stage,
+        });
+        const [hawksAnalytics] = await AnalyticsBrowser.load({
+          writeKey: resp.hawks,
         });
         setOnce(true);
-        setAnalytics(analytics);
+        setStageAnalytics(stageAnalytics);
+        setHawksAnalytics(hawksAnalytics);
       } catch (err) {
         console.log(err);
-        setAnalytics(undefined);
+        setStageAnalytics(undefined);
         setOnce(false);
       }
     }
@@ -91,7 +100,7 @@ function ManualMode({ inputs = [] }: MainComponentProps) {
         <button
           className={BUTTON_CLASS}
           onClick={async () => {
-            if (!analytics) {
+            if (!analyticsStage) {
               console.warn("no analytics");
               return;
             }
@@ -102,18 +111,51 @@ function ManualMode({ inputs = [] }: MainComponentProps) {
                   user_id: createRandomUserId(),
                 });
               }
-              const resp = await analytics.identify(`${inputValues.user_id}`, {
-                email: inputValues.user_email,
-                name: inputValues.user_full_name,
-              });
+              const resp = await analyticsStage.identify(
+                `${inputValues.user_id}`,
+                {
+                  email: inputValues.user_email,
+                  name: inputValues.user_full_name,
+                }
+              );
               console.log(resp);
-              analytics.track(eventName, inputValues);
+              analyticsStage.track(eventName, inputValues);
             } catch (err) {
               console.log(err);
             }
           }}
         >
-          Create Track
+          Create Track Stage
+        </button>
+        <button
+          className={BUTTON_CLASS}
+          onClick={async () => {
+            if (!analyticsHawks) {
+              console.warn("no analytics");
+              return;
+            }
+            try {
+              if (inputValues.user_id.length === 0) {
+                setInputValues({
+                  ...inputValues,
+                  user_id: createRandomUserId(),
+                });
+              }
+              const resp = await analyticsHawks.identify(
+                `${inputValues.user_id}`,
+                {
+                  email: inputValues.user_email,
+                  name: inputValues.user_full_name,
+                }
+              );
+              console.log(resp);
+              analyticsHawks.track(eventName, inputValues);
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+        >
+          Create Track Hawks
         </button>
         <button
           className={BUTTON_CLASS}
