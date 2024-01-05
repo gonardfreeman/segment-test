@@ -27,7 +27,7 @@ function Home() {
       }
     }
     handleLoadAnalytics().catch((err) => console.log(err));
-  }, [once]);
+  }, [once, router]);
   if (!isLoggedIn) {
     return (
       <>

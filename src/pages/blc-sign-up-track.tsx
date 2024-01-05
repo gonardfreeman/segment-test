@@ -2,6 +2,8 @@ import { BLC_SIGN_UP_TRACK_INPUTS } from "@/data/tracks/blcSignUp";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 
+import { useRouter } from "next/router";
+
 import { useState, useEffect } from "react";
 
 const ManualFormComponent = dynamic(
@@ -14,15 +16,13 @@ const ManualFormComponent = dynamic(
 function ManualMode() {
   const [isLoggedIn, setLogin] = useState<boolean>(false);
   const [once, setOnce] = useState<boolean>(false);
-  const url = new URL(window.location.href);
+  const router = useRouter();
   useEffect(() => {
     async function handleLoadAnalytics() {
       try {
         const resp = await (
           await fetch(
-            `/api/checkCredentials?user=${url.searchParams.get(
-              "user"
-            )}&password=${url.searchParams.get("password")}`
+            `/api/checkCredentials?user=${router.query.user}&password=${router.query.password}`
           )
         ).json();
         setLogin(resp.result === true);
@@ -33,7 +33,7 @@ function ManualMode() {
       }
     }
     handleLoadAnalytics().catch((err) => console.log(err));
-  }, [once]);
+  }, [once, router]);
   if (!isLoggedIn) {
     return (
       <>
