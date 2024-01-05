@@ -6,11 +6,17 @@ import { useState, useEffect } from "react";
 
 const NoSSR = dynamic(() => import("./components/clicker"), { ssr: false });
 
-function Home() {
+function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const [isLoggedIn, setLogin] = useState<boolean>(false);
   const [once, setOnce] = useState<boolean>(false);
   const router = useRouter();
   console.log(router);
+  console.log(searchParams);
+
   useEffect(() => {
     async function handleLoadAnalytics() {
       try {

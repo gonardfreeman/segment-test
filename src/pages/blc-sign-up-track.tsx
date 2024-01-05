@@ -13,10 +13,15 @@ const ManualFormComponent = dynamic(
   }
 );
 
-function ManualMode() {
+function ManualMode({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const [isLoggedIn, setLogin] = useState<boolean>(false);
   const [once, setOnce] = useState<boolean>(false);
   const router = useRouter();
+  console.log(searchParams);
   useEffect(() => {
     async function handleLoadAnalytics() {
       try {
